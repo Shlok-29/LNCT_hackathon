@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+  --font-outfit: "Outfit", sans-serif;
+  
+  --color-primary: #6366f1;
+  --color-primary-glow: rgba(99, 102, 241, 0.5);
+  --color-bg-dark: #0a0a0f;
+  --color-bg-card: rgba(30, 30, 45, 0.4);
+}
+
+@layer base {
+  body {
+    @apply bg-slate-950 text-white selection:bg-indigo-500/30;
+    font-family: var(--font-inter);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('/logo-nobg.png');
+    background-size: 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.05;
+    z-index: -10;
+    pointer-events: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-outfit);
+  }
+}
+
+@layer components {
+  /* Premium Glassmorphism Card */
+  .glass-card {
+    @apply bg-white/5 border border-white/10 backdrop-blur-xl rounded-3xl transition-all duration-300;
+  }
+  
+  .glass-card:hover {
+    @apply border-white/20 bg-white/10 shadow-2xl shadow-indigo-500/10;
+  }
+
+  /* Animated Text Gradient */
+  .text-animate-gradient {
+    @apply bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent;
+    background-size: 200% auto;
+    animation: textGradient 4s linear infinite;
+  }
+
+  /* Shimmer Effect for loading or buttons */
+  .shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    animation: shimmer 2s infinite;
+  }
+}
+
+@keyframes textGradient {
+  to { background-position: 200% center; }
+}
+
+@keyframes shimmer {
+  to { left: 100%; }
+}
+
+/* Custom transitions for Framer Motion interactions */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
