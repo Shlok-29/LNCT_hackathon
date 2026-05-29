@@ -3,7 +3,7 @@ import axios from 'axios';
 // Create an Axios instance with a base URL
 // In a real app, this would be an environment variable like process.env.VITE_API_URL
 const api = axios.create({
-  baseURL: (import.meta.env.VITE_API_URL || 'https://fincash-1.onrender.com') + '/api', // Production backend URL
+  baseURL: (import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api', // Production backend URL
   headers: {
     'Content-Type': 'application/json',
   },

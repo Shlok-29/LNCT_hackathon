@@ -10,7 +10,7 @@ const AdminUsers = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('https://fincash-1.onrender.com/api/admin/users', {
+      const response = await axios.get('http://localhost:5000/api/admin/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(response.data);
@@ -28,7 +28,7 @@ const AdminUsers = () => {
   const toggleEdit = async (userId) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`https://fincash-1.onrender.com/api/admin/toggle-edit/${userId}`, {}, {
+      await axios.patch(`http://localhost:5000/api/admin/toggle-edit/${userId}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchUsers(); // Refresh list

@@ -24,7 +24,7 @@ const ResetPasswordPage = () => {
     
     setLoading(true);
     try {
-      await axios.post('https://fincash-1.onrender.com/api/reset-password', { token, newPassword });
+      await axios.post('http://localhost:5000/api/reset-password', { token, newPassword });
       setStatus('success');
       setMessage('Password updated successfully!');
       setTimeout(() => navigate('/login'), 2000);

@@ -80,7 +80,7 @@ const UserDashboardLayout = () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) return;
-      const response = await axios.get('https://fincash-1.onrender.com/api/notifications', {
+      const response = await axios.get('http://localhost:5000/api/notifications', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setNotifications(response.data);
@@ -94,7 +94,7 @@ const UserDashboardLayout = () => {
     const syncProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://fincash-1.onrender.com/api/profile', {
+        const response = await axios.get('http://localhost:5000/api/profile', {
           headers: { Authorization: `Bearer ${token}` }
         });
         dispatch(updateProfile(response.data));
@@ -111,7 +111,7 @@ const UserDashboardLayout = () => {
   const markAsRead = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.patch(`https://fincash-1.onrender.com/api/notifications/${id}/read`, {}, {
+      await axios.patch(`http://localhost:5000/api/notifications/${id}/read`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchNotifications();
@@ -302,8 +302,8 @@ const UserDashboardLayout = () => {
         </header>
 
         {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-auto bg-gray-950 p-6 md:p-8">
-          <div className="max-w-6xl mx-auto">
+        <div className="flex-1 overflow-y-auto bg-gray-950 p-6 md:p-8 flex flex-col min-h-0">
+          <div className="max-w-6xl mx-auto flex-1 flex flex-col min-h-0">
             <Outlet />
           </div>
         </div>

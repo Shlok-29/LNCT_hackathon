@@ -35,7 +35,7 @@ const Investments = () => {
   useEffect(() => {
     const fetchMarketData = async () => {
       try {
-        const response = await axios.get((import.meta.env.VITE_API_URL || 'https://fincash-1.onrender.com') + '/api/market-data');
+        const response = await axios.get((import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/market-data');
         if (response.data && response.data.stocks) {
           setMarketData(response.data);
         }

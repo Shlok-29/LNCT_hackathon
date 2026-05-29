@@ -26,7 +26,7 @@ const HumanMentors = ({ mode = 'all' }) => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const mentorsRes = await axios.get('https://fincash-1.onrender.com/api/mentors');
+        const mentorsRes = await axios.get('http://localhost:5000/api/mentors');
         setMentors([
           {
             id: 1,
@@ -97,6 +97,58 @@ const HumanMentors = ({ mode = 'all' }) => {
             linkedinUrl: "https://www.linkedin.com/in/balajisrinivasan/",
             description: "Former CTO of Coinbase and General Partner at a16z. Balaji is a visionary in the crypto space, authoring 'The Network State' and advising highly disruptive Web3 startups.",
             sessionOverview: "Deep dive into web3 macro trends, decentralized systems, and startup advising in the crypto ecosystem."
+          },
+          {
+            id: 6,
+            name: "Ishita Sharma",
+            role: "CA Finalist & Junior Audit Associate",
+            specialty: "Indirect Taxation & GST Compliance",
+            rating: 4.8,
+            reviews: "120",
+            available: "Mon, Wed, Fri",
+            sessionPrice: "₹1,499",
+            image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400",
+            description: "A top-ranking CA finalist who simplifies the complexities of GST and tax filing for young freelancers and small businesses.",
+            sessionOverview: "Personalized session on managing your GST filings and optimizing indirect tax for your business or freelance work."
+          },
+          {
+            id: 7,
+            name: "Aditya Verma",
+            role: "Quantitative Trader & Fintech Enthusiast",
+            specialty: "Scalping Strategies & Technical Analysis",
+            rating: 4.9,
+            reviews: "250",
+            available: "Weekdays",
+            sessionPrice: "₹999",
+            image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400",
+            description: "A 21-year-old trading prodigy who has built a successful portfolio using data-driven scalping techniques.",
+            sessionOverview: "Live trading session focusing on scalping strategies and market entry/exit timing for beginners."
+          },
+          {
+            id: 8,
+            name: "Rohan Mehta",
+            role: "CFA Level 2 Candidate",
+            specialty: "Portfolio Rebalancing & Equity Research",
+            rating: 4.7,
+            reviews: "85",
+            available: "Sat-Sun",
+            sessionPrice: "₹1,299",
+            image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+            description: "Passionate about value investing, Rohan helps beginners understand how to read balance sheets and build long-term wealth.",
+            sessionOverview: "Deep dive into equity research and how to build a diversified portfolio that beats the market."
+          },
+          {
+            id: 9,
+            name: "Sneha Kapoor",
+            role: "Young Investor & Content Creator",
+            specialty: "Gen-Z Financial Planning & Budgeting",
+            rating: 4.9,
+            reviews: "430",
+            available: "Daily Evening",
+            sessionPrice: "₹799",
+            image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
+            description: "Sneha focuses on teaching financial discipline and the power of compounding to students and early-career professionals.",
+            sessionOverview: "Interactive budgeting session to help you save your first ₹1 Lakh and start your investment journey early."
           }
         ]);
         setAiVideos([
@@ -188,6 +240,36 @@ const HumanMentors = ({ mode = 'all' }) => {
               { question: "What does a 'Bull Run' mean in crypto?", options: ["A farm event", "A market crash", "An extended period where prices rise aggressively", "When no trades happen"], correct: 2 },
               { question: "What is an 'Exchange'?", options: ["Trading cards", "A digital marketplace where you can buy and sell cryptocurrencies", "Swapping secrets", "A physical bank branch"], correct: 1 },
               { question: "What is an 'NFT'?", options: ["No Fee Trading", "National Finance Token", "Non-Fungible Token", "New Financial Technology"], correct: 2 }
+            ]
+          },
+          {
+            title: "Indian Tax System Explained: All you need to know",
+            duration: "25:00",
+            views: "0",
+            thumbnail: "https://images.unsplash.com/photo-1589232390691-58221683aa3d",
+            videoUrl: "/indian_tax_system.mp4",
+            category: "Taxation",
+            quiz: [
+              { question: "Who is responsible for collecting Direct Taxes in India?", options: ["GST Council", "CBDT", "RBI", "SEBI"], correct: 1 },
+              { question: "Which tax was replaced by GST in India?", options: ["Income Tax", "Corporate Tax", "Service Tax", "Wealth Tax"], correct: 2 },
+              { question: "What is the current standard GST rate for most electronics?", options: ["5%", "12%", "18%", "28%"], correct: 2 },
+              { question: "Under which section can you claim deductions for LIC premiums?", options: ["Section 80D", "Section 80C", "Section 80G", "Section 10"], correct: 1 },
+              { question: "What does TDS stand for?", options: ["Tax Deducted at Source", "Total Daily Savings", "Tax Deposit Scheme", "Tax Deduction System"], correct: 0 },
+              { question: "What is the maximum limit for deduction under Section 80C?", options: ["1 Lakh", "1.5 Lakh", "2 Lakh", "2.5 Lakh"], correct: 1 },
+              { question: "Which body governs the GST in India?", options: ["The Parliament", "GST Council", "Finance Ministry", "State Governments"], correct: 1 },
+              { question: "What is the income limit for a tax rebate under Section 87A (New Regime)?", options: ["5 Lakh", "6 Lakh", "7 Lakh", "8 Lakh"], correct: 2 },
+              { question: "What is Corporate Tax?", options: ["Tax on salaries", "Tax on company profits", "Tax on imports", "Tax on luxury goods"], correct: 1 },
+              { question: "Which type of tax is GST?", options: ["Direct Tax", "Indirect Tax", "Progressive Tax", "Wealth Tax"], correct: 1 },
+              { question: "What is the full form of PAN?", options: ["Permanent Account Number", "Personal Access Number", "Primary Account Note", "Public Account Network"], correct: 0 },
+              { question: "What is the standard deduction for salaried individuals?", options: ["30,000", "40,000", "50,000", "60,000"], correct: 2 },
+              { question: "Which tax is levied on the import of goods into India?", options: ["GST", "Excise Duty", "Customs Duty", "Cess"], correct: 2 },
+              { question: "What is the portal for filing Income Tax Returns in India?", options: ["GSTN Portal", "e-Filing Portal", "RBI Portal", "NSDL Portal"], correct: 1 },
+              { question: "What is Surcharge in Indian tax system?", options: ["A processing fee", "Tax levied on tax-exempt income", "An additional tax on high-income earners", "A fine for late filing"], correct: 2 },
+              { question: "What is 'Cess' used for?", options: ["General budget", "Specific purposes like Education and Health", "Repaying state debts", "Import subsidies"], correct: 1 },
+              { question: "What is the frequency of filing GST returns for regular taxpayers?", options: ["Weekly", "Monthly/Quarterly", "Half-yearly", "Annually"], correct: 1 },
+              { question: "What is a 'Tax Haven'?", options: ["A bank vault", "A country with very low or no taxes", "A legal tax consultancy", "A government savings scheme"], correct: 1 },
+              { question: "What is Capital Gains Tax?", options: ["Tax on salary", "Tax on profit from sale of assets", "Tax on bank interest", "Tax on lottery winnings"], correct: 1 },
+              { question: "Which year is the 'Assessment Year' if the Financial Year is 2023-24?", options: ["2022-23", "2023-24", "2024-25", "2025-26"], correct: 2 }
             ]
           }
         ]);

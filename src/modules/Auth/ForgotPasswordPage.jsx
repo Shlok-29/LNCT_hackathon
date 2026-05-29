@@ -14,7 +14,7 @@ const ForgotPasswordPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post('https://fincash-1.onrender.com/api/forgot-password', { email });
+      const response = await axios.post('http://localhost:5000/api/forgot-password', { email });
       setStatus('success');
       // For demo purposes, we show the token if it's returned (it is in our mock backend)
       setMessage('Reset link sent! In this demo, use token: ' + response.data.token);

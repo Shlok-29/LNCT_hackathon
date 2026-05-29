@@ -52,7 +52,7 @@ function App() {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get('https://fincash-1.onrender.com/api/profile', {
+          const response = await axios.get('http://localhost:5000/api/profile', {
             headers: { Authorization: `Bearer ${token}` }
           });
           if (response.data) {

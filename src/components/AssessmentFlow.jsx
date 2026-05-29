@@ -38,7 +38,7 @@ const AssessmentFlow = ({ video, onClose }) => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const profileRes = await axios.get('https://fincash-1.onrender.com/api/profile', {
+      const profileRes = await axios.get('http://localhost:5000/api/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
       

@@ -12,6 +12,30 @@ const Video = require('./models/Video');
 const LearningPath = require('./models/LearningPath');
 const UserLearningPath = require('./models/UserLearningPath');
 
+// Mock Data Storage for Fallback (when MongoDB is unavailable)
+let mockUsers = [];
+let mockPersonalizedData = [];
+
+// Initialize Admin User in Mock Storage
+(async () => {
+    try {
+        const hashedAdminPassword = await bcrypt.hash('admin123', 10);
+        mockUsers.push({
+            _id: 'mock_admin_id_' + Date.now(),
+            name: 'Admin',
+            email: 'admin@fincash.com',
+            password: hashedAdminPassword,
+            role: 'admin',
+            xp: 1000,
+            streak: 5,
+            badges: ['Early Bird', 'Tax Pro']
+        });
+        console.log('Mock admin user initialized.');
+    } catch (err) {
+        console.error('Failed to initialize mock admin user:', err);
+    }
+})();
+
 const PersonalizedDataSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     stockAnalysis: [{
@@ -239,6 +263,54 @@ mongoose.connect(MONGO_URI)
                   image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
                   description: "Vikram specializes in HNI portfolio management and alternative investments like REITs and fractional real estate.",
                   sessionOverview: "Strategic discussion on asset allocation and exploring high-yield alternative investment opportunities."
+              },
+              {
+                  name: "Ishita Sharma",
+                  role: "CA Finalist & Junior Audit Associate",
+                  specialty: "Indirect Taxation & GST Compliance",
+                  rating: 4.8,
+                  reviews: 120,
+                  available: "Mon, Wed, Fri",
+                  sessionPrice: "₹1,499",
+                  image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400",
+                  description: "A top-ranking CA finalist who simplifies the complexities of GST and tax filing for young freelancers and small businesses.",
+                  sessionOverview: "Personalized session on managing your GST filings and optimizing indirect tax for your business or freelance work."
+              },
+              {
+                  name: "Aditya Verma",
+                  role: "Quantitative Trader & Fintech Enthusiast",
+                  specialty: "Scalping Strategies & Technical Analysis",
+                  rating: 4.9,
+                  reviews: 250,
+                  available: "Weekdays",
+                  sessionPrice: "₹999",
+                  image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400",
+                  description: "A 21-year-old trading prodigy who has built a successful portfolio using data-driven scalping techniques.",
+                  sessionOverview: "Live trading session focusing on scalping strategies and market entry/exit timing for beginners."
+              },
+              {
+                  name: "Rohan Mehta",
+                  role: "CFA Level 2 Candidate",
+                  specialty: "Portfolio Rebalancing & Equity Research",
+                  rating: 4.7,
+                  reviews: 85,
+                  available: "Sat-Sun",
+                  sessionPrice: "₹1,299",
+                  image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+                  description: "Passionate about value investing, Rohan helps beginners understand how to read balance sheets and build long-term wealth.",
+                  sessionOverview: "Deep dive into equity research and how to build a diversified portfolio that beats the market."
+              },
+              {
+                  name: "Sneha Kapoor",
+                  role: "Young Investor & Content Creator",
+                  specialty: "Gen-Z Financial Planning & Budgeting",
+                  rating: 4.9,
+                  reviews: 430,
+                  available: "Daily Evening",
+                  sessionPrice: "₹799",
+                  image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
+                  description: "Sneha focuses on teaching financial discipline and the power of compounding to students and early-career professionals.",
+                  sessionOverview: "Interactive budgeting session to help you save your first ₹1 Lakh and start your investment journey early."
               }
           ];
           await Mentor.insertMany(mentorsData);
@@ -271,6 +343,36 @@ mongoose.connect(MONGO_URI)
                   quiz: [
                       { question: "What is a 'Bull Market'?", options: ["Market falling", "Market rising", "No movement", "Market closed"], correct: 1 },
                       { question: "What does 'Liquidity' refer to?", options: ["Company cash", "Ease of buying/selling", "Stock color", "Market volume"], correct: 1 }
+                  ]
+              },
+              {
+                  title: "Indian Tax System Explained: All you need to know",
+                  duration: "25:00",
+                  views: "0",
+                  thumbnail: "https://images.unsplash.com/photo-1589232390691-58221683aa3d",
+                  videoUrl: "/indian_tax_system.mp4",
+                  category: "Taxation",
+                  quiz: [
+                      { question: "Who is responsible for collecting Direct Taxes in India?", options: ["GST Council", "CBDT", "RBI", "SEBI"], correct: 1 },
+                      { question: "Which tax was replaced by GST in India?", options: ["Income Tax", "Corporate Tax", "Service Tax", "Wealth Tax"], correct: 2 },
+                      { question: "What is the current standard GST rate for most electronics?", options: ["5%", "12%", "18%", "28%"], correct: 2 },
+                      { question: "Under which section can you claim deductions for LIC premiums?", options: ["Section 80D", "Section 80C", "Section 80G", "Section 10"], correct: 1 },
+                      { question: "What does TDS stand for?", options: ["Tax Deducted at Source", "Total Daily Savings", "Tax Deposit Scheme", "Tax Deduction System"], correct: 0 },
+                      { question: "What is the maximum limit for deduction under Section 80C?", options: ["1 Lakh", "1.5 Lakh", "2 Lakh", "2.5 Lakh"], correct: 1 },
+                      { question: "Which body governs the GST in India?", options: ["The Parliament", "GST Council", "Finance Ministry", "State Governments"], correct: 1 },
+                      { question: "What is the income limit for a tax rebate under Section 87A (New Regime)?", options: ["5 Lakh", "6 Lakh", "7 Lakh", "8 Lakh"], correct: 2 },
+                      { question: "What is Corporate Tax?", options: ["Tax on salaries", "Tax on company profits", "Tax on imports", "Tax on luxury goods"], correct: 1 },
+                      { question: "Which type of tax is GST?", options: ["Direct Tax", "Indirect Tax", "Progressive Tax", "Wealth Tax"], correct: 1 },
+                      { question: "What is the full form of PAN?", options: ["Permanent Account Number", "Personal Access Number", "Primary Account Note", "Public Account Network"], correct: 0 },
+                      { question: "What is the standard deduction for salaried individuals?", options: ["30,000", "40,000", "50,000", "60,000"], correct: 2 },
+                      { question: "Which tax is levied on the import of goods into India?", options: ["GST", "Excise Duty", "Customs Duty", "Cess"], correct: 2 },
+                      { question: "What is the portal for filing Income Tax Returns in India?", options: ["GSTN Portal", "e-Filing Portal", "RBI Portal", "NSDL Portal"], correct: 1 },
+                      { question: "What is Surcharge in Indian tax system?", options: ["A processing fee", "Tax levied on tax-exempt income", "An additional tax on high-income earners", "A fine for late filing"], correct: 2 },
+                      { question: "What is 'Cess' used for?", options: ["General budget", "Specific purposes like Education and Health", "Repaying state debts", "Import subsidies"], correct: 1 },
+                      { question: "What is the frequency of filing GST returns for regular taxpayers?", options: ["Weekly", "Monthly/Quarterly", "Half-yearly", "Annually"], correct: 1 },
+                      { question: "What is a 'Tax Haven'?", options: ["A bank vault", "A country with very low or no taxes", "A legal tax consultancy", "A government savings scheme"], correct: 1 },
+                      { question: "What is Capital Gains Tax?", options: ["Tax on salary", "Tax on profit from sale of assets", "Tax on bank interest", "Tax on lottery winnings"], correct: 1 },
+                      { question: "Which year is the 'Assessment Year' if the Financial Year is 2023-24?", options: ["2022-23", "2023-24", "2024-25", "2025-26"], correct: 2 }
                   ]
               }
           ];
@@ -344,79 +446,71 @@ app.post('/api/signup', async (req, res) => {
         const { name, email, password } = req.body;
         if (!name || !email || !password) return res.status(400).json({ message: 'All fields are required' });
 
-        const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ message: 'User already exists' });
+        const isDBConnected = mongoose.connection.readyState === 1;
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ name, email, password: hashedPassword });
-        await newUser.save();
+        if (isDBConnected) {
+            const existingUser = await User.findOne({ email });
+            if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
-        const token = jwt.sign({ id: newUser._id, email: newUser.email, role: newUser.role }, SECRET_KEY, { expiresIn: '24h' });
-        res.status(201).json({ 
-            token, 
-            user: { 
-                id: newUser._id, 
-                name: newUser.name, 
-                email: newUser.email,
-                role: newUser.role,
-                salary: newUser.salary,
-                familyMembers: newUser.familyMembers,
-                canEditFinancials: newUser.canEditFinancials,
-                xp: newUser.xp,
-                streak: newUser.streak,
-                badges: newUser.badges
-            } 
-        });
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const newUser = new User({ name, email, password: hashedPassword });
+            await newUser.save();
 
-        // Initialize Learning Paths for new user
-        const allPaths = await LearningPath.find();
-        const userPaths = allPaths.map(path => ({
-            userId: newUser._id,
-            pathId: path._id,
-            progress: 0,
-            status: 'not_started'
-        }));
-        await UserLearningPath.insertMany(userPaths);
+            const token = jwt.sign({ id: newUser._id, email: newUser.email, role: newUser.role }, SECRET_KEY, { expiresIn: '24h' });
+            res.status(201).json({ 
+                token, 
+                user: { 
+                    id: newUser._id, 
+                    name: newUser.name, 
+                    email: newUser.email,
+                    role: newUser.role,
+                    xp: newUser.xp,
+                    streak: newUser.streak,
+                    badges: newUser.badges
+                } 
+            });
 
-        // Generate personalized data for new user
-        await PersonalizedData.create({
-            userId: newUser._id,
-            stockAnalysis: [
-                {
-                    symbol: "RELIANCE",
-                    name: "Reliance Industries",
-                    recommendation: "Buy",
-                    analysis: "Strong growth in retail and telecom sectors makes this a defensive yet growth-oriented pick for your profile.",
-                    score: 85,
-                    potential: "+12%"
-                },
-                {
-                    symbol: "HDFCBANK",
-                    name: "HDFC Bank",
-                    recommendation: "Hold",
-                    analysis: "Market leader with steady margins. Perfect for long-term stability in your personalized portfolio.",
-                    score: 72,
-                    potential: "+8%"
-                }
-            ],
-            simulations: [
-                {
-                    title: "The Emergency Fund Run",
-                    description: "Can you survive a sudden car repair and medical bill with just your current savings?",
-                    goal: "Reach ₹50,000 liquid cash",
-                    duration: "3 Virtual Months",
-                    complexity: "Easy"
-                },
-                {
-                    title: "Market Crash 2024",
-                    description: "The market just dipped 15%. How do you rebalance your portfolio to capitalize on the recovery?",
-                    goal: "Minimize losses to <5%",
-                    duration: "6 Virtual Months",
-                    complexity: "Hard"
-                }
-            ]
-        });
+            // Initialize data in background
+            LearningPath.find().then(allPaths => {
+                const userPaths = allPaths.map(path => ({ userId: newUser._id, pathId: path._id, progress: 0, status: 'not_started' }));
+                UserLearningPath.insertMany(userPaths).catch(e => console.error("Error seeding user paths", e));
+            });
+            PersonalizedData.create({
+                userId: newUser._id,
+                stockAnalysis: [
+                    { symbol: "RELIANCE", name: "Reliance Industries", recommendation: "Buy", analysis: "Strong growth in retail and telecom sectors.", score: 85, potential: "+12%" },
+                    { symbol: "HDFCBANK", name: "HDFC Bank", recommendation: "Hold", analysis: "Market leader with steady margins.", score: 72, potential: "+8%" }
+                ],
+                simulations: [
+                    { title: "The Emergency Fund Run", description: "Can you survive a sudden car repair?", goal: "Reach ₹50,000 liquid cash", duration: "3 Virtual Months", complexity: "Easy" },
+                    { title: "Market Crash 2024", description: "The market just dipped 15%.", goal: "Minimize losses to <5%", duration: "6 Virtual Months", complexity: "Hard" }
+                ]
+            }).catch(e => console.error("Error seeding personalized data", e));
+
+        } else {
+            // Mock Implementation
+            console.log('Using Mock Signup (DB Disconnected)');
+            const existingMockUser = mockUsers.find(u => u.email === email);
+            if (existingMockUser) return res.status(400).json({ message: 'User already exists' });
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const newUser = {
+                _id: 'mock_user_' + Date.now(),
+                name,
+                email,
+                password: hashedPassword,
+                role: 'user',
+                xp: 0,
+                streak: 0,
+                badges: []
+            };
+            mockUsers.push(newUser);
+
+            const token = jwt.sign({ id: newUser._id, email: newUser.email, role: newUser.role }, SECRET_KEY, { expiresIn: '24h' });
+            res.status(201).json({ token, user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role, xp: 0, streak: 0, badges: [] } });
+        }
     } catch (error) {
+        console.error('Signup error:', error);
         res.status(500).json({ message: 'Server error during signup' });
     }
 });
@@ -425,89 +519,64 @@ app.post('/api/signup', async (req, res) => {
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+        console.log(`Login attempt for: ${email}`);
+        
+        // Only use DB if readyState is EXACTLY 1 (Connected)
+        const isDBConnected = mongoose.connection.readyState === 1;
+
+        if (isDBConnected) {
+            try {
+                const user = await User.findOne({ email }).maxTimeMS(2000); // Fail fast
+                if (!user || !(await bcrypt.compare(password, user.password))) {
+                    return res.status(401).json({ message: 'Invalid credentials' });
+                }
+                const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, SECRET_KEY, { expiresIn: '24h' });
+                return res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, xp: user.xp, streak: user.streak, badges: user.badges } });
+            } catch (dbError) {
+                console.error("DB Query failed despite readyState=1, falling back to mock:", dbError);
+                // Fall through to mock
+            }
+        }
+
+        // Mock Implementation Fallback
+        console.log('Using Mock Authentication...');
+        const user = mockUsers.find(u => u.email === email);
+        if (!user) {
+             console.log(`User ${email} not found in mock storage`);
+             return res.status(401).json({ message: 'Invalid credentials' });
+        }
+        
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+             console.log(`Invalid password for mock user ${email}`);
+             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, SECRET_KEY, { expiresIn: '24h' });
-        // Ensure personalized data exists
-        let personalized = await PersonalizedData.findOne({ userId: user._id });
-        if (!personalized) {
-            personalized = await PersonalizedData.create({
-                userId: user._id,
-                stockAnalysis: [
-                    { symbol: "RELIANCE", name: "Reliance Industries", recommendation: "Buy", analysis: "Strong growth in retail and telecom sectors.", score: 85, potential: "+12%" },
-                    { symbol: "HDFCBANK", name: "HDFC Bank", recommendation: "Hold", analysis: "Market leader with steady margins.", score: 72, potential: "+8%" }
-                ],
-                simulations: [
-                    { title: "The Emergency Fund Run", description: "Can you survive a sudden car repair?", goal: "Reach ₹50,000 liquid cash", duration: "3 Virtual Months", complexity: "Easy" },
-                    { title: "Market Crash 2024", description: "The market just dipped 15%.", goal: "Minimize losses to <5%", duration: "6 Virtual Months", complexity: "Hard" }
-                ],
-                insuranceRecommendations: {
-                    health: [
-                        { company: "Star Health", plan: "Family Health Optima", cover: "₹10 Lakh", premium: "₹1,200/mo", rating: 4.8, features: ["Cashless Hospitalization", "No Claim Bonus"] },
-                        { company: "Niva Bupa", plan: "ReAssure Pro", cover: "₹15 Lakh", premium: "₹1,500/mo", rating: 4.7, features: ["Unlimited Reinstatement", "Global Cover"] },
-                        { company: "Care Health", plan: "Care Supreme", cover: "₹25 Lakh", premium: "₹1,800/mo", rating: 4.6, features: ["AYUSH Coverage", "Daily Cash"] },
-                        { company: "HDFC ERGO", plan: "Optima Secure", cover: "₹10 Lakh", premium: "₹1,400/mo", rating: 4.9, features: ["4x Coverage", "Secure Benefit"] },
-                        { company: "ICICI Lombard", plan: "Health Elite", cover: "₹20 Lakh", premium: "₹1,650/mo", rating: 4.7, features: ["Wellness Rewards", "OPD Cover"] },
-                        { company: "Aditya Birla", plan: "Activ Health Platinum", cover: "₹10 Lakh", premium: "₹1,100/mo", rating: 4.5, features: ["100% HealthReturns", "Chronic Management"] }
-                    ],
-                    life: [
-                        { company: "HDFC Life", plan: "Click 2 Protect Super", cover: "₹1 Crore", premium: "₹800/mo", rating: 4.9, features: ["Return of Premium", "Critical Illness Rider"] },
-                        { company: "ICICI Pru", plan: "iProtect Smart", cover: "₹1.5 Crore", premium: "₹1,000/mo", rating: 4.8, features: ["Accidental Death Cover", "Terminal Illness"] },
-                        { company: "Max Life", plan: "Smart Secure Plus", cover: "₹1 Crore", premium: "₹750/mo", rating: 4.7, features: ["Increasing Cover", "Premium Break"] },
-                        { company: "Tata AIA", plan: "Sampoorna Raksha", cover: "₹2 Crore", premium: "₹1,200/mo", rating: 4.8, features: ["Life Stage Benefit", "Flexible Payouts"] },
-                        { company: "LIC", plan: "Tech Term", cover: "₹1 Crore", premium: "₹900/mo", rating: 4.6, features: ["Trust of LIC", "Low Cost Online Plan"] }
-                    ]
-                }
-            });
-        }
+        return res.json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role, xp: user.xp || 0, streak: user.streak || 0, badges: user.badges || [] } });
 
-        res.json({ 
-            token, 
-            user: { 
-                id: user._id, 
-                name: user.name, 
-                email: user.email,
-                role: user.role,
-                salary: user.salary,
-                familyMembers: user.familyMembers,
-                canEditFinancials: user.canEditFinancials,
-                xp: user.xp,
-                streak: user.streak,
-                badges: user.badges,
-                personalized: personalized
-            } 
-        });
-
-        // Ensure user has learning paths initialized (for existing users)
-        const userPathsCount = await UserLearningPath.countDocuments({ userId: user._id });
-        if (userPathsCount === 0) {
-            const allPaths = await LearningPath.find();
-            const userPaths = allPaths.map(path => ({
-                userId: user._id,
-                pathId: path._id,
-                progress: 0,
-                status: 'not_started'
-            }));
-            await UserLearningPath.insertMany(userPaths);
-        }
     } catch (error) {
-        res.status(500).json({ message: 'Server error during login' });
+        console.error('CRITICAL LOGIN ERROR:', error);
+        res.status(500).json({ message: 'Server error during login', details: error.message });
     }
 });
 
 // Roadmap Routes
 // Get User Profile
+// Get User Profile
 app.get('/api/profile', authenticateToken, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password');
-        const personalized = await PersonalizedData.findOne({ userId: user._id });
-        res.json({
-            ...user._doc,
-            personalized: personalized
-        });
+        const isDBConnected = mongoose.connection.readyState === 1;
+        if (isDBConnected) {
+            const user = await User.findById(req.user.id).select('-password');
+            const personalized = await PersonalizedData.findOne({ userId: user._id });
+            res.json({ ...user._doc, personalized });
+        } else {
+            console.log('Using Mock Profile');
+            const user = mockUsers.find(u => u._id === req.user.id);
+            if (!user) return res.status(404).json({ message: 'User not found' });
+            res.json({ ...user, personalized: null });
+        }
     } catch (error) {
         res.status(500).json({ message: 'Error fetching profile' });
     }
@@ -516,39 +585,29 @@ app.get('/api/profile', authenticateToken, async (req, res) => {
 app.post('/api/roadmap', authenticateToken, async (req, res) => {
     try {
         const { salary, familyMembers, savings, expenses } = req.body;
-        
-        // Update User Profile and LOCK editing
-        await User.findByIdAndUpdate(req.user.id, { 
-            salary, 
-            familyMembers,
-            canEditFinancials: false // Lock after fill
-        });
+        const isDBConnected = mongoose.connection.readyState === 1;
 
-        // Add a notification for completing roadmap
-        await User.findByIdAndUpdate(req.user.id, {
-            $push: {
-                notifications: {
-                    title: "Roadmap Generated",
-                    message: "Your personalized financial roadmap has been generated successfully!",
-                    type: "success"
-                }
-            },
-            $inc: { xp: 50 } // Reward 50 XP
-        });
-
-        const newRoadmap = new Roadmap({
-            userId: req.user.id,
-            salary,
-            familyMembers,
-            savings,
-            expenses
-        });
-        await newRoadmap.save();
-
-        // AI Advice Generator (Logic-based AI)
-        const aiAdvice = generateAIAdvice(salary, familyMembers, savings);
-
-        res.status(201).json({ ...newRoadmap._doc, aiAdvice });
+        if (isDBConnected) {
+            await User.findByIdAndUpdate(req.user.id, { salary, familyMembers, canEditFinancials: false });
+            await User.findByIdAndUpdate(req.user.id, {
+                $push: { notifications: { title: "Roadmap Generated", message: "Your personalized financial roadmap has been generated successfully!", type: "success" } },
+                $inc: { xp: 50 }
+            });
+            const newRoadmap = new Roadmap({ userId: req.user.id, salary, familyMembers, savings, expenses });
+            await newRoadmap.save();
+            const aiAdvice = generateAIAdvice(salary, familyMembers, savings);
+            res.status(201).json({ ...newRoadmap._doc, aiAdvice });
+        } else {
+            console.log('Using Mock Roadmap');
+            const userIndex = mockUsers.findIndex(u => u._id === req.user.id);
+            if (userIndex !== -1) {
+                mockUsers[userIndex].salary = salary;
+                mockUsers[userIndex].familyMembers = familyMembers;
+                mockUsers[userIndex].xp = (mockUsers[userIndex].xp || 0) + 50;
+            }
+            const aiAdvice = generateAIAdvice(salary, familyMembers, savings);
+            res.status(201).json({ salary, familyMembers, savings, expenses, aiAdvice });
+        }
     } catch (error) {
         res.status(500).json({ message: 'Error saving roadmap' });
     }
@@ -663,8 +722,17 @@ app.get('/api/market-data', async (req, res) => {
 // New Endpoints
 app.get('/api/mentors', async (req, res) => {
     try {
-        const mentors = await Mentor.find();
-        res.json(mentors);
+        const isDBConnected = mongoose.connection.readyState === 1;
+        if (isDBConnected) {
+            const mentors = await Mentor.find();
+            res.json(mentors);
+        } else {
+            console.log('Using Mock Mentors');
+            res.json([
+                { name: "Rajesh Kumar", role: "Senior Investment Strategist", specialty: "Indian Stock Market & Mutual Funds", rating: 4.9, reviews: 156, available: "Mon - Wed", sessionPrice: "₹799", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400", description: "With over 15 years in the Indian financial sector, Rajesh specializes in long-term wealth creation through equity and debt instruments." },
+                { name: "Priya Sharma", role: "Personal Finance Consultant", specialty: "Tax Planning & Retirement", rating: 4.8, reviews: 89, available: "Thu - Sat", sessionPrice: "₹699", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400", description: "Priya helps families achieve financial independence through disciplined tax saving and retirement corpus building." }
+            ]);
+        }
     } catch (error) {
         res.status(500).json({ message: 'Error fetching mentors' });
     }
@@ -672,8 +740,17 @@ app.get('/api/mentors', async (req, res) => {
 
 app.get('/api/videos', async (req, res) => {
     try {
-        const videos = await Video.find();
-        res.json(videos);
+        const isDBConnected = mongoose.connection.readyState === 1;
+        if (isDBConnected) {
+            const videos = await Video.find();
+            res.json(videos);
+        } else {
+            console.log('Using Mock Videos');
+            res.json([
+                { title: "Cryptocurrency Masterclass - From Zero to Hero", duration: "45:32", views: "2.1M", thumbnail: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d", videoUrl: "/crypto_trading.mp4", category: "Crypto" },
+                { title: "Indian Tax System Explained: All you need to know", duration: "25:00", views: "0", thumbnail: "https://images.unsplash.com/photo-1589232390691-58221683aa3d", videoUrl: "/indian_tax_system.mp4", category: "Taxation" }
+            ]);
+        }
     } catch (error) {
         res.status(500).json({ message: 'Error fetching videos' });
     }
@@ -681,8 +758,17 @@ app.get('/api/videos', async (req, res) => {
 
 app.get('/api/learning-paths', async (req, res) => {
     try {
-        const paths = await LearningPath.find();
-        res.json(paths);
+        const isDBConnected = mongoose.connection.readyState === 1;
+        if (isDBConnected) {
+            const paths = await LearningPath.find();
+            res.json(paths);
+        } else {
+            console.log('Using Mock Learning Paths');
+            res.json([
+                { title: "Saving Basics", description: "Build your first emergency fund", progress: 75, icon: "ShieldCheck", color: "from-emerald-500/20 to-emerald-500/5", borderColor: "border-emerald-500/20" },
+                { title: "Financial Discipline", description: "Master the 50/30/20 rule", progress: 30, icon: "Target", color: "from-blue-500/20 to-blue-500/5", borderColor: "border-blue-500/20" }
+            ]);
+        }
     } catch (error) {
         res.status(500).json({ message: 'Error fetching learning paths' });
     }
@@ -690,8 +776,14 @@ app.get('/api/learning-paths', async (req, res) => {
 
 app.get('/api/user-stats', authenticateToken, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('xp streak badges');
-        res.json(user);
+        const isDBConnected = mongoose.connection.readyState === 1;
+        if (isDBConnected) {
+            const user = await User.findById(req.user.id).select('xp streak badges');
+            res.json(user);
+        } else {
+            const user = mockUsers.find(u => u._id === req.user.id);
+            res.json({ xp: user?.xp || 0, streak: user?.streak || 0, badges: user?.badges || [] });
+        }
     } catch (error) {
         res.status(500).json({ message: 'Error fetching user stats' });
     }
@@ -699,12 +791,27 @@ app.get('/api/user-stats', authenticateToken, async (req, res) => {
 
 app.get('/api/notifications', authenticateToken, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('notifications');
-        const notifications = user.notifications || [];
-        res.json(notifications.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)));
+        const isDBConnected = mongoose.connection.readyState === 1;
+        if (isDBConnected) {
+            const user = await User.findById(req.user.id).select('notifications');
+            if (!user) {
+                return res.json([]);
+            }
+            const notifications = user.notifications || [];
+            return res.json(notifications.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)));
+        } else {
+            // Fallback to mock notification data
+            console.log('Using Mock Notifications');
+            const mockNotifications = [
+                { _id: 'notif_1', title: "Welcome to FinCash!", message: "Start your financial journey.", type: "info", isRead: false },
+                { _id: 'notif_2', title: "Security Alert", message: "Enable two-factor authentication.", type: "warning", isRead: false }
+            ];
+            res.json(mockNotifications);
+        }
     } catch (error) {
         console.error("Error fetching notifications:", error);
-        res.status(500).json({ message: 'Error fetching notifications' });
+        // Return empty array on error instead of 500
+        res.json([]);
     }
 });
 
@@ -767,6 +874,13 @@ app.patch('/api/user-learning-paths/:pathId/progress', authenticateToken, async 
     }
 });
 
+// Heartbeat to keep process alive and log health
+setInterval(() => {
+    const isDBConnected = mongoose.connection.readyState === 1;
+    console.log(`[Heartbeat] Server active. DB Status: ${isDBConnected ? 'Connected' : 'Disconnected'} (${mongoose.connection.readyState})`);
+}, 60000);
+
+console.log('Attempting to start Express server...');
 app.listen(PORT, () => {
     console.log(`Backend server running on port ${PORT}`);
 });

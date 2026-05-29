@@ -20,7 +20,7 @@ const SignupPage = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await axios.post((import.meta.env.VITE_API_URL || 'https://fincash-1.onrender.com') + '/api/signup', { name, email, password });
+      const response = await axios.post((import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/signup', { name, email, password });
       const user = response.data.user;
       dispatch(login({ user: user, role: user.role }));
       localStorage.setItem('token', response.data.token);

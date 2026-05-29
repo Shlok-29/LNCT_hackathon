@@ -20,11 +20,12 @@ const AIMentor = () => {
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: 'end' });
   };
 
   useEffect(() => {
-    scrollToBottom();
+    const timeoutId = window.setTimeout(scrollToBottom, 50);
+    return () => window.clearTimeout(timeoutId);
   }, [messages]);
 
   const handleSend = async (e) => {
@@ -79,7 +80,7 @@ const AIMentor = () => {
     <motion.div 
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="h-[calc(100vh-6rem)] flex flex-col bg-gray-900 border border-gray-800 rounded-3xl overflow-hidden shadow-2xl w-full max-w-5xl mx-auto"
+      className="flex flex-col flex-1 min-h-0 bg-gray-900 border border-gray-800 rounded-3xl overflow-hidden shadow-2xl w-full max-w-5xl mx-auto"
     >
       {/* Header */}
       <div className="p-6 border-b border-gray-800 flex items-center justify-between bg-gray-900/50 backdrop-blur-md z-10">
@@ -101,7 +102,7 @@ const AIMentor = () => {
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-hide bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.05),transparent_40%)]">
+      <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6 scrollbar-hide bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.05),transparent_40%)]">
         <AnimatePresence>
           {messages.map((msg) => (
             <motion.div
@@ -116,7 +117,7 @@ const AIMentor = () => {
                 }`}>
                   {msg.role === 'user' ? <User size={20} /> : <Bot size={20} />}
                 </div>
-                <div className={`space-y-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
+                <div className={`flex flex-col space-y-1 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                   <div className={`p-4 rounded-2xl text-sm leading-relaxed ${
                     msg.role === 'user' 
                       ? 'bg-indigo-600 text-white rounded-tr-none' 

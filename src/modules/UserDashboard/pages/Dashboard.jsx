@@ -31,7 +31,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchMarketData = async () => {
       try {
-        const response = await axios.get((import.meta.env.VITE_API_URL || 'https://fincash-1.onrender.com') + '/api/market-data');
+        const response = await axios.get((import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/market-data');
         setMarketData(response.data);
       } catch (err) {
         console.error("Dashboard market data fetch failed:", err);
@@ -46,7 +46,7 @@ const Dashboard = () => {
     const fetchRoadmap = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get((import.meta.env.VITE_API_URL || 'https://fincash-1.onrender.com') + '/api/roadmap', {
+        const response = await axios.get((import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/roadmap', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setRoadmap(response.data);
@@ -64,7 +64,7 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) return;
-        const response = await axios.get((import.meta.env.VITE_API_URL || 'https://fincash-1.onrender.com') + '/api/user-learning-paths', {
+        const response = await axios.get((import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/user-learning-paths', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setLearningPaths(response.data);
@@ -76,7 +76,7 @@ const Dashboard = () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) return;
-      const response = await axios.get((import.meta.env.VITE_API_URL || 'https://fincash-1.onrender.com') + '/api/user-stats', {
+      const response = await axios.get((import.meta.env.VITE_API_URL || 'http://localhost:5000') + '/api/user-stats', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUserStats(response.data);
@@ -93,18 +93,18 @@ const Dashboard = () => {
       setIsUpdating(true);
       const newProgress = Math.min(currentProgress + 25, 100);
       const token = localStorage.getItem('token');
-      await axios.patch((import.meta.env.VITE_API_URL || 'https://fincash-1.onrender.com') + `/api/user-learning-paths/${pathId}/progress`, 
+      await axios.patch((import.meta.env.VITE_API_URL || 'http://localhost:5000') + `/api/user-learning-paths/${pathId}/progress`, 
         { progress: newProgress },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
       // Refresh data
-      const pathsRes = await axios.get('https://fincash-1.onrender.com/api/user-learning-paths', {
+      const pathsRes = await axios.get('http://localhost:5000/api/user-learning-paths', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLearningPaths(pathsRes.data);
       
-      const statsRes = await axios.get('https://fincash-1.onrender.com/api/user-stats', {
+      const statsRes = await axios.get('http://localhost:5000/api/user-stats', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUserStats(statsRes.data);

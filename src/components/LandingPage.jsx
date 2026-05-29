@@ -25,7 +25,7 @@ export default function LandingPage() {
       if (isAuthenticated) {
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get('https://fincash-1.onrender.com/api/roadmap', {
+          const response = await axios.get('http://localhost:5000/api/roadmap', {
             headers: { Authorization: `Bearer ${token}` }
           });
           // If a roadmap exists, we could pre-set it or show a "View Roadmap" button
